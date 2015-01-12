@@ -1,0 +1,11 @@
+# run it as
+# source/ergo -m mol/h2o.mol params/hf321g.ego
+#
+use_simple_starting_guess = 1
+scf.convergence_threshold = 1e-3
+J_K.use_fmm = 1
+J_K.threshold_1el = 1e-13
+J_K.threshold_2el_J = 1e-9
+J_K.threshold_2el_K = 1e-8
+basis = "3-21G"
+run "HF"

@@ -1,0 +1,19 @@
+===================================================
+Ergo version 3.4 release notes, 2014-07-15
+===================================================
+
+The following changes were made compared to the previous version:
+
+- Implemented gradient gradient/forces computation (only
+  Hellmann-Feynman forces; no Pulay correction implemented so far).
+
+- Optimized integral code; critical parts of Coulomb and HF exchange
+  matrix construction routines are now significantly faster, at least
+  on some architectures.
+
+- Renamed some local variables in integrals/integrals_hermite.cc to
+  fix problem on Mips/Mips64 architectures, where identifiers like
+  R3000/R4000 caused problems.
+
+- Bugfixes and code cleanup.
+

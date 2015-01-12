@@ -1,0 +1,35 @@
+# This is a benchmarking input file, written for PDC benchmarking needs.
+# Tests a B3LYP calculation and prints immediately some important timings.
+# run it as:
+# source/ergo params/b3lyp.ego
+# 
+# Feel free to set appropriately TMPDIR and OMP_NUM_THREADS variables.
+#
+#
+# It will print a matrix 3x3, where the columns correspond to
+# different phases of the calculations (the task is to minimize the
+# sum in the row) and the different rows correspond to different types
+# of calculations - the last row is most representative.
+#
+# On AMD3800+x2 box, code compiled with gcc/-O9 -ftree-vectorize prints
+# in the first row:
+#
+use_simple_starting_guess=1
+J_K.use_fmm=1
+scf.convergence_threshold=1e-3
+scf.max_number_of_iterations=5
+;XC.sparse_mode=
+XC.radint = 1e-11
+molecule "mol/ch4_040.mol"
+basis = "STO-2G"
+system "rm ergoscf.out"
+run "B3LYP"
+system "echo Jtime[s] Ktime[s] XCtime[s];awk '/ar t/{j=$8}/_mt t/{x=$8}/K_by_boxes t/{k=$8}END{print j,k,x}' ergoscf.out"
+initial_density="density.bin"
+scf.max_number_of_iterations=2
+basis = "3-21G"
+run "B3LYP"
+system "awk '/ar t/{j=$8}/_mt t/{x=$8}/K_by_boxes t/{k=$8}END{print j,k,x}' ergoscf.out"
+basis = "6-31G"
+run "B3LYP"
+system "awk '/ar t/{j=$8}/_mt t/{x=$8}/K_by_boxes t/{k=$8}END{print j,k,x}' ergoscf.out"

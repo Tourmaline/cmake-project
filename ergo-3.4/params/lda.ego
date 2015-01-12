@@ -1,0 +1,33 @@
+# run it as
+# source/ergo -e 'molecule "mol/ch4_010.mol"' params/lda.ego
+#
+convergence_threshold = 1e-2
+J_K.threshold_1el = 1e-13
+J_K.threshold_2el = 1e-9
+#charge = 1
+#spin_polarization = 1
+basis = "3-21G"
+#molecule_inline
+#He   0.0 0.0 0.0
+#He   0   0   3
+#EOF
+
+convergence_threshold = 1e-2
+scf_shift = 1
+run "LDA"
+
+basis = "cc-pVDZ"
+convergence_threshold = 1e-2
+J_K.threshold_2el = 1e-9
+initial_density = "filename.ergo"
+system "mv density.bin filename.ergo"
+run "B3LYP"
+system "mv density.bin b3lyp-density.bin"
+
+convergence_threshold = 1e-5
+J_K.threshold_2el = 1e-11
+XC.radint = 1e-11
+initial_density = "b3lyp-density.bin"
+run "B3LYP"
+system "echo Three step calculation done."
+# Loops?

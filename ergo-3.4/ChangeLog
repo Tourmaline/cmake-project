@@ -1,0 +1,38 @@
+2005-12-17  Pawel Salek  <pawsa@theochem.kth.se>
+
+	* source/basisset.c: check whether basis set is specified somewhere.
+	* source/densityfitting.[ch]: dumping (alpha|beta) to file.
+	* source/dft/grid-gen.[hc]: blocked grid did lot of uncessesary work.
+	* source/matrix/Matr.h: return a value as required.
+
+2005-12-16  Pawel Salek  <pawsa@theochem.kth.se>
+
+	* Makefile.am: add bootstrap.sh to EXTRA_DIST.
+	* basis/Makefile.am: add most of the basis sets apart from those
+	with funny characters in the file names.
+	* source/densityfitting.c: silence down some stuff.
+	* source/main.cpp: fix a segfault on restart with no basis set.
+	* source/dft/prop-eval.c: make it easier for compilers to unroll.
+	* source/dft/rho-mat.c: ditto.
+	
+2005-12-15  Pawel Salek  <pawsa@theochem.kth.se>
+
+	* source/cholesky.[ch]: simple wrapper around dposv.
+	* source/densityfitting.[ch]: direct inversion does not provide
+	sufficient accuracy as expected; solving LE does. Some cleanup.
+	* source/integrals_2el_layer.[ch]: rearrange calling DensFit.
+	* source/memorymanag.h: add ergo_new() macro.
+	* source/scf.cpp: DensFit is more opaque now, adapt.
+	
+2005-12-05  Pawel Salek  <pawsa@theochem.kth.se>
+
+	* dft/*.c: C++ source comptability the less-typing way.
+
+2005-12-05  Pawel Salek  <pawsa@theochem.kth.se>
+
+	* configure.ac: generate some standard prefixes.
+	* source/basisset.[ch]: search for basis sets in few standard
+	locations.
+	* source/main.c: use it.
+	* source/molecule.[hc]: read basis set from the mol file unless
+	there is one specified on the command line.
