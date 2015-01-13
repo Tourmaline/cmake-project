@@ -1,11 +1,8 @@
 #!/bin/sh
 
-if test "$top_builddir" = ""; then
-    top_builddir=..
-fi
-if test "$top_srcdir" = ""; then
-    top_srcdir=..
-fi
+
+    top_builddir=.
+    top_srcdir=.
 
 if test `"$top_builddir"/source/ergo -e precision` = single; then
     echo SKIPPED

@@ -1,11 +1,8 @@
 #!/bin/sh
 
-if test "$top_builddir" = ""; then
-    top_builddir=..
-fi
-if test "$top_srcdir" = ""; then
-    top_srcdir=..
-fi
+    top_builddir=.
+    top_srcdir=.
+
 
 if test `"$top_builddir"/source/ergo -e precision` = single; then
     echo SKIPPED
@@ -45,7 +42,7 @@ XC.radint=1e-10
 run "BLYP"
 EOINPUT
 if 
-check_final_energy -253.0730954 2e-5 ; 
+check_final_energy -254.0730954 2e-5 ; # artificial error 253->254
 then
 echo OK
 else
