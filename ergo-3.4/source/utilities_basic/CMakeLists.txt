@@ -48,3 +48,10 @@ endforeach()
 
 include_directories(${INTERNAL_BLAS_INCLUDE_DIRS})
 include_directories(${INTERNAL_LAPACK_INCLUDE_DIRS})
+
+
+install(TARGETS utilities_basic
+RUNTIME DESTINATION bin
+LIBRARY DESTINATION lib
+ARCHIVE DESTINATION lib/static )
+install( FILES ${utilities_basic_headers} DESTINATION include )

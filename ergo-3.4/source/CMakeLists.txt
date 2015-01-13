@@ -29,7 +29,6 @@ matrix
 integrals
 basisset
 electron_dynamics 
-gen_schrodinger
 utilities
 utilities_basic
 ci
@@ -79,7 +78,6 @@ target_link_libraries(
     utilities_basic
     integrals
     electron_dynamics
-    gen_schrodinger
     mat
     basisset 
     ${THREAD_LIBRARIES}

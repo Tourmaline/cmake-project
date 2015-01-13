@@ -29,3 +29,10 @@ endforeach()
 
 include_directories(${CMAKE_SOURCE_DIR}/source/matrix/template_lapack/blas)
 include_directories(${CMAKE_SOURCE_DIR}/source/matrix/template_lapack/lapack)
+
+
+install(TARGETS electron_dynamics
+RUNTIME DESTINATION bin
+LIBRARY DESTINATION lib
+ARCHIVE DESTINATION lib/static )
+install( FILES ${electron_dynamics_headers} DESTINATION include )

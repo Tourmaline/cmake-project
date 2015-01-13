@@ -110,5 +110,12 @@ target_link_libraries(
 	
 
 
+install(TARGETS mat
+RUNTIME DESTINATION bin
+LIBRARY DESTINATION lib
+ARCHIVE DESTINATION lib/static )
+install( FILES ${mat_headers} DESTINATION include )
+
+
 
 

@@ -41,3 +41,11 @@ include_directories(${INTERNAL_BLAS_INCLUDE_DIRS})
 include_directories(${INTERNAL_LAPACK_INCLUDE_DIRS})
 
 include_directories(${CMAKE_SOURCE_DIR}/source/densfromf/purification)
+
+
+
+install(TARGETS densfromf
+RUNTIME DESTINATION bin
+LIBRARY DESTINATION lib
+ARCHIVE DESTINATION lib/static )
+install( FILES ${densfromf_headers} DESTINATION include )

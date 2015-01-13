@@ -44,3 +44,11 @@ endforeach()
 
 include_directories(${INTERNAL_BLAS_INCLUDE_DIRS})
 include_directories(${INTERNAL_LAPACK_INCLUDE_DIRS})
+
+
+
+install(TARGETS scf
+RUNTIME DESTINATION bin
+LIBRARY DESTINATION lib
+ARCHIVE DESTINATION lib/static )
+install( FILES ${scf_headers} DESTINATION include )

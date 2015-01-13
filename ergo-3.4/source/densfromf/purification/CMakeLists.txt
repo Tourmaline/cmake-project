@@ -23,11 +23,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 include_directories(${CMAKE_SOURCE_DIR}/source)
 
 set(library_subdirs
-#basisset
 matrix
-#integrals
-#utilities
-#utilities_basic
 )
  
 foreach(dir ${library_subdirs})

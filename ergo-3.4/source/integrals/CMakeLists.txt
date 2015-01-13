@@ -103,3 +103,11 @@ RUNTIME DESTINATION bin
 LIBRARY DESTINATION lib
 ARCHIVE DESTINATION lib/static )
 install( FILES ${integrals_headers} DESTINATION include )
+
+
+
+install(TARGETS integrals
+RUNTIME DESTINATION bin
+LIBRARY DESTINATION lib
+ARCHIVE DESTINATION lib/static )
+install( FILES ${integrals_headers} DESTINATION include )

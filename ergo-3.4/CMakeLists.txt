@@ -11,7 +11,7 @@ set(PROJECT ergo)
 project(${PROJECT})
 
 # project version
-set(PROJECT_VERSION 3.51)
+set(PROJECT_VERSION 3.4)
 
 # set variables for config.h
 set(ERGO_SPREFIX     	\"${PROJECT_SOURCE_DIR}\")
@@ -52,13 +52,10 @@ message(STATUS "The host processor is ${CMAKE_HOST_SYSTEM_PROCESSOR}")
 
 option(ENABLE_OMP 		"Enable OpenMP" OFF)
 option(USE_LINALG_TEMPLATES 	"Use C++ Linear Algebra Template Library (BLAS+LAPACK)" OFF)
-option(USE_SSE_INTRINSICS 	"Use SSE intrinsics to generate efficient computational kernels" OFF)
 option(PRECISION_SINGLE  	"Use single precision" OFF)
 option(PRECISION_DOUBLE		"Use single precision" ON)
 option(PRECISION_LONG_DOUBLE 	"Use single precision" OFF)
-option(STDC_HEADERS 		"ANSI C header files are used" ON)
 option(USE_BLAS_IN_XC 		"Use BLAS for small matrices in XC integration" OFF)
-option(YYTEXT_POINTER  		"`lex' declares `yytext' as a `char *' by default, not a `char[]'" ON)
 
 
 
@@ -170,27 +167,6 @@ set(INTERNAL_LAPACK_INCLUDE_DIRS "${CMAKE_SOURCE_DIR}/source/matrix/template_lap
 
 
 
-# CHECK FOR SSE
-if(USE_SSE_INTRINSICS)
-FIND_PACKAGE(SSE)
-IF(C_SSE2_FOUND)
-  SET(CMAKE_C_FLAGS "${C_SSE2_FLAGS} -DUSE_SSE2 ${CMAKE_C_FLAGS}")
-ENDIF(C_SSE2_FOUND)
-IF(C_SSE3_FOUND)
-  SET(CMAKE_C_FLAGS "${C_SSE3_FLAGS} -DUSE_SSE3 ${CMAKE_C_FLAGS}")
-ENDIF(C_SSE3_FOUND)
-IF(C_SSE4_1_FOUND)
-  SET(CMAKE_C_FLAGS "${C_SSE4_1_FLAGS} -DUSE_SSE4_1 ${CMAKE_C_FLAGS}")
-ENDIF(C_SSE4_1_FOUND)
-IF(C_SSE4_2_FOUND)
-  SET(CMAKE_C_FLAGS "${C_SSE4_2_FLAGS} -DUSE_SSE4_2 ${CMAKE_C_FLAGS}")
-ENDIF(C_SSE4_2_FOUND)
-endif()
-
-
-
-
-
 
 # CREATE CONFIGURE FILE 
 configure_file (
@@ -239,6 +215,7 @@ endif()
 
 # setup CPack
 # cpack -D CPACK_GENERATOR="ZIP;TGZ" /path/to/build/tree
+include(InstallRequiredSystemLibraries)
 set(CPACK_RESOURCE_FILE_LICENSE "${PROJECT_SOURCE_DIR}/ergo_license_long.txt")
 set(CPACK_PACKAGE_VERSION_MAJOR "${VERSION}")
 set(CPACK_PACKAGE_CONTACT "ergoscf.org")
