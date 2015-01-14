@@ -35,6 +35,7 @@ set(CTEST_CONFIGURE_COMMAND "${CTEST_CONFIGURE_COMMAND} \"${CTEST_SOURCE_DIRECTO
 
 
 ctest_start("Nightly")
+
 ctest_update()
 ctest_configure()
 ctest_build()
