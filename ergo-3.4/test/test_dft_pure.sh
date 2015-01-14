@@ -42,7 +42,7 @@ XC.radint=1e-10
 run "BLYP"
 EOINPUT
 if 
-check_final_energy -254.0730954 2e-5 ; # artificial error 253->254
+check_final_energy -253.0730954 2e-5 ;
 then
 echo OK
 else
