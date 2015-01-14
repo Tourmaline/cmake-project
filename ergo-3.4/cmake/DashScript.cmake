@@ -1,5 +1,6 @@
-set(CTEST_SOURCE_DIRECTORY "$ENV{HOME}/Desktop/PROJECTS/cmake-project/ergo-3.4")
-set(CTEST_BINARY_DIRECTORY "$ENV{HOME}/Desktop/PROJECTS/cmake-project/ergo-3.4/build_nightly")
+set(CTEST_CLONE_DIRECTORY  "$ENV{HOME}/nightly_builds")
+set(CTEST_SOURCE_DIRECTORY "$ENV{HOME}/nightly_builds/cmake-project/ergo-3.4")
+set(CTEST_BINARY_DIRECTORY "$ENV{HOME}/nightly_builds/cmake-project/ergo-3.4/build")
 
 set(CTEST_SITE "anastasia_computer")
 set(CTEST_BUILD_NAME "linux-gcc-default")
@@ -23,7 +24,7 @@ find_program(CTEST_MEMORYCHECK_COMMAND NAMES valgrind)
 #set(CTEST_MEMORYCHECK_SUPPRESSIONS_FILE ${CTEST_SOURCE_DIRECTORY}/tests/valgrind.supp)
 
 if(NOT EXISTS "${CTEST_SOURCE_DIRECTORY}")
-  set(CTEST_CHECKOUT_COMMAND "${CTEST_GIT_COMMAND} clone git@github.com:ergo-research/ergo.git ${CTEST_SOURCE_DIRECTORY}")
+  set(CTEST_CHECKOUT_COMMAND "${CTEST_GIT_COMMAND} clone git@github.com:Tourmaline/cmake-project.git ${CTEST_CLONE_DIRECTORY}")
 endif()
 
 set(CTEST_UPDATE_COMMAND "${CTEST_GIT_COMMAND}")
