@@ -1,7 +1,7 @@
-set(CTEST_SOURCE_DIRECTORY "$ENV{HOME}/Desktop/PROJECTS/ergo_project/repos/ergo")
-set(CTEST_BINARY_DIRECTORY "$ENV{HOME}/Desktop/PROJECTS/ergo_project/repos/ergo/build")
+set(CTEST_SOURCE_DIRECTORY "$ENV{HOME}/Desktop/PROJECTS/cmake-project/ergo-3.4")
+set(CTEST_BINARY_DIRECTORY "$ENV{HOME}/Desktop/PROJECTS/cmake-project/ergo-3.4/build_nightly")
 
-#set(CTEST_SITE "www.ergoscf.org")
+set(CTEST_SITE "anastasia_computer")
 set(CTEST_BUILD_NAME "linux-gcc-default")
 
 set(CTEST_CMAKE_GENERATOR "Unix Makefiles")
