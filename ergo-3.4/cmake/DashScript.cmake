@@ -1,6 +1,6 @@
-set(CTEST_CLONE_DIRECTORY  "$ENV{HOME}/nightly_builds")
-set(CTEST_SOURCE_DIRECTORY "$ENV{HOME}/nightly_builds/cmake-project/ergo-3.4")
-set(CTEST_BINARY_DIRECTORY "$ENV{HOME}/nightly_builds/cmake-project/ergo-3.4/build")
+set(CTEST_CLONE_DIRECTORY  "$ENV{HOME}/nightly_tests")
+set(CTEST_SOURCE_DIRECTORY "$ENV{HOME}/nightly_tests/cmake-project/ergo-3.4")
+set(CTEST_BINARY_DIRECTORY "$ENV{HOME}/nightly_tests/cmake-project/ergo-3.4/build")
 
 set(CTEST_SITE "anastasia_computer")
 set(CTEST_BUILD_NAME "linux-gcc-default")

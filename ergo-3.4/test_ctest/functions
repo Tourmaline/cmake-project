@@ -102,7 +102,7 @@ check_tdhf_dipole_at_time()
 # echo check_tdhf_dipole_at_time, params: $1 $2 $3
 valuewithreversedsign=`echo $2 '*' -1 | bc -l`
 $AWK 'function e(v,r){return(v>r||v<-r)}
-/^INED Data for dipole plot/ && $6=='$1'{c=1; printf "computed  %15.9f\nreference %15.9f\n", $7, '$valuewithreversedsign'; exit (e($7-('$valuewithreversedsign'),'$3'))} END{if(!c) { print "Not found";exit(1)}}
+/^INSC Data for dipole plot/ && $6=='$1'{c=1; printf "computed  %15.9f\nreference %15.9f\n", $7, '$valuewithreversedsign'; exit (e($7-('$valuewithreversedsign'),'$3'))} END{if(!c) { print "Not found";exit(1)}}
 ' ergoscf.out
 }
 
