@@ -1,0 +1,292 @@
+\documentclass[a4paper,10pt]{article}
+\usepackage[utf8]{inputenc}
+
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{graphicx}
+
+\lstset{language=C}
+
+
+\title{cmake - Cross-Platform Makefile Generator}
+\author{Anastasia Kruchinina}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+CMake is a cross-platform build systems generator which allows to build software on a broad set of platforms on easier and unified way. In this report our goal is to compile the quantum chemistry code Ergo using Cmake. In addition, we disciver abilities of testing tools CTest and CDash.
+\end{abstract}
+
+\section{Introduction to CMake}
+
+CMake is the cross-platform, open-source build system. CMake generates native makefiles and workspaces that can be used in the compiler environment of your choice. On Linux systems the default build enviroment is make, but other options are possible.
+
+
+Cmake commands are written in the files CMakeLists.txt.
+
+CMake supports \textit{out-of-source build}. It is advised never mix-up source files with generated files. With out-of-source build the whole code structure looks better since all cmake files are hiden in some subdirectory. Another advantage is that it allows to have more build trees for the same source code.
+
+A good practice is to set a cmake file-guard which prevent in-source build. Then we can create build directory and run cmake from it using command \texttt{cmake /path/to/source}.
+Then all cmake files will be located in this build directory.
+
+Compilation can be done in parallel using make: \texttt{make -j [N]}.
+
+In order to specify configuration variables, one can use the command line with the \texttt{-D} option. Very useful to use the \texttt{-i} option for interactive setting of the variables.
+
+The option \texttt{-L} allow to see all (non-advanced) variables.
+
+
+Cmake allows easy check for thre existance of the libraries, functions, header files and compiler flags.
+
+For example, in order to check the existance of the \texttt{-pedantic} flag add to the CMakeLists.txt the followng code:
+
+\begin{verbatim}
+INCLUDE(CheckCCompilerFlag)
+CHECK_C_COMPILER_FLAG(-pedantic C_HAS_PEDANTIC)
+IF (C_HAS_PEDANTIC)
+  SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -pedantic")
+ENDIF ()
+\end{verbatim}
+
+
+Cmake provide possibility to specify rules to run at install time. 
+To change install directory one should change installation prefix:
+\begin{verbatim}
+cmake -DCMAKE_INSTALL_PREFIX=/install/path/
+\end{verbatim}
+
+Intersting, but cmake does not provide uninstall option. 
+
+
+
+CPach is a cross-platform packaging tool. To setup generator, run the following command
+\begin{verbatim}
+cpack -D CPACK_GENERATOR="ZIP;TGZ" 
+\end{verbatim}
+
+
+
+Cmake allow to write configure files. The function \texttt{configure\_file} reads input file and producenew configure file where all variable definitions from input file replaced by their values specified in CMakeList.txt.
+If the input file is modified the build system will re-run CMake to re-configure the file and generate the build system again. In our case the input file is cmake\_config.in.
+
+
+
+
+\section{Ctest and CDash}
+\subsection{Testing}
+
+Useful links:
+
+\url{http://www.vtk.org/Wiki/CMake/Testing_With_CTest}
+
+
+\texttt{enable\_testing()} -  adds another build target, which is test for Makefile generators, or RUN\_TESTS for integrated development environments (like Visual Studio).
+
+
+\begin{verbatim}
+ add_test(NAME <name> [CONFIGURATIONS [Debug|Release|...]]
+            [WORKING\_DIRECTORY dir]
+            COMMAND <command> [arg1 [arg2 ...]])
+\end{verbatim}
+
+It is possible to execute tests in parallel:
+\texttt{ctest -j [N]}
+
+\subsection{Dashboard}
+
+The result of a test run, reformatted for easy review, is called a "dashboard". CDash is an open source, web-based software testing server.
+            
+The default settings of the module are to submit the dashboard to Kitware's Public Dashboard, where you can register your project for free.
+
+In order to submit to some other server, "CTestConfig.cmake" in the top level directory of your source, and set your own dashboard preferences. If you are using a CDash server, you can download a preconfigured file from the respective project page on that server ("Settings" / "Project", tab "Miscellaneous").
+
+
+There are three types of dashboard submissions:
+\begin{description}
+ \item[Experimental] means the current state of the project. An experimental submission can be performed at any time, usually interactively from the current working copy of a developer.
+  \item[Nightly] is similar to experimental, except that the source tree will be set to the state it was in at a specific nightly time. This ensures that all "nightly" submissions correspond to the state of the project at the same point in time. "Nightly" builds are usually done automatically at a preset time of day.
+ \item[Continuous] means that the source tree is updated to the latest revision, and a build / test cycle is performed only if any files were actually updated. Like "Nightly" builds, "Continuous" ones are usually done automatically and repeatedly in intervals.
+\end{description}
+
+
+The standard procedure for runing tests and submutting results to dashboard is
+\begin{verbatim}
+Start -> Update (only Nightly) -> Configure -> 
+Build -> Test -> Coverage -> Submit.
+\end{verbatim}
+
+
+How to schedule a nightly build with all options turned on. 
+\begin{verbatim}
+ctest -VV -S /path/to/my_cdash_script.cmake
+\end{verbatim}
+
+\subsection{Code coverage}
+
+Code coverage (\url{http://en.wikipedia.org/wiki/Code_coverage}) it is a measure of how many lines of codes are executed during tests. The information is collected by instrumentation of the code using special programs.
+
+The CTest allow writing scripts which automate testing and submitting dashboards. Cron can run jobs which are runnig such scripts regulary.
+
+CMake Scripting Of CTest + Cron:
+\begin{itemize}
+ \item \url{http://www.cmake.org/Wiki/CMake_Scripting_Of_CTest}
+\item\url{http://www.gofigure2.org/index.php/developers/2-uncategorised/30-setup-ctest-server.html}
+\item\url{https://techbase.kde.org/Development/CMake/DashboardBuilds#How_to_set_up_a_Nightly_build}
+\item\url{http://insightsoftwareconsortium.github.io/ITKBarCamp-doc/SoftwareQuality/DashboardSubmission/index.html}
+\end{itemize}
+
+Currently coverage is only supported on gcc compiler \texttt{cgov}[\url{http://en.wikipedia.org/wiki/Gcov}]. To perform coverage test, make sure that your code is built with debug symbols, without optimization, and with special flags. These flags are:
+\texttt{-fprofile-arcs -ftest-coverage}
+
+CTest maintains the following four metrics:
+\begin{itemize}
+\item Number of lines covered
+\item Number of lines not covered
+\item Total number of lines in code
+\item Percentage of coverage (number of covered lines/total lines)
+\end{itemize}
+
+
+On the webpage of the project on www.cdash.org one can find all the information about code coverage.
+Notice that CDash Free Edition doesn't allow more than 10 builds a day.
+
+
+\subsection{Dynamic Analysis}
+
+Dynamic Analysis can be performed using Vargring Memcheck during running tests. Results about memory leaks, uninitialized memory reads, freeing invalid memory, invalid pointer reads and so on can be found on the project dashboard.
+
+\subsection{Cmake for Ergo code}
+
+In order to compile the Ergo code (with Release build type) just run
+\begin{verbatim}
+cmake /path/to/source
+\end{verbatim}
+
+
+
+
+We have bash scripts for testing. Every time cmake copy test directory to the build directory. The reason for that is that test files must know the location of the executable.
+%I copy the whole directory (notice that I changed paths in \texttt{test\_hf.sh}) into build. 
+After runnung cmake and compilation, the ctest run tests from the build directory.
+
+CDash for the Ergo code: \url{http://my.cdash.org/index.php?project=ergo_cmake}.
+
+The build errors, coverage and dynamic analysis are presented here.  
+
+One can make code invisible for public by changing settings of the project on the website.
+
+
+In order to run coverage test, run cmake with Debug build type: 
+\begin{verbatim}
+cmake -DCMAKE_BUILD_TYPE=Debug /path/to/source
+\end{verbatim}
+It will add needed flags to the compiler.
+For testing without reporting results one can use just \texttt{make test} or \texttt{ctest} commands.
+For testing and reporting results to the dashboard can be used \texttt{cmake -D Experimental}.
+
+
+\subsection{Cron}
+
+Nigthly tests can be run using cron environment. In order to set up the cron to run nightly test every night at 22:00, one can use the following command
+\begin{verbatim}
+# m h  dom mon dow   command
+00 22 * * *  . ~/.keychain/$HOSTNAME-sh; ctest -VV -S /path/to/DashScript.cmake > /path/to/logs/cdash_nightly.log 2>&1
+\end{verbatim}
+
+The DashScript contains commands for ctest to run clone git (or other system) directory, to fetch changes, configure and compile the code, run tests and submit the results to the dashboard.
+
+On order to be able to run such command, ona must add ssh key to the git account to allow fetching new versions without password check and install keychain to make cron install needed ssh enviroment variables before running script.
+
+
+Then after the submission of the job, one can see on dashboard which files were updated.
+
+\section{Using cmake with ninja build system }
+
+Cmake by default generates Makefiles on Linux systems, but here is an option to generate files for other build systems. For example, let us consider ninja (\url{https://github.com/martine/ninja}). Ninja is a small build system designed for speed.
+
+\begin{verbatim}
+cmake -G Ninja -DCMAKE_MAKE_PROGRAM=/path/to/ninja ..
+\end{verbatim}
+
+For compilation of the program just run \texttt{ninja}.
+Let us compare results of compilation with make and with ninja with option \texttt{-j4}:
+
+\vskip 10 pt
+
+\begin{tabular}{|l|l|l|l|l|}
+	\hline
+	& real & user & sys & size\\
+	\hline
+	cmake + ninja & 5m32.708s & 8m57.294s & 0m7.644s & 3.4MB\\
+	cmake + make  & 5m36.039s & 8m48.801s & 0m6.743s & 3.4MB\\
+	\hline
+\end{tabular}
+
+\vskip 10 pt
+
+Therefore, we did not notice difference in time and size of the executables between ninja and make systems.
+
+
+
+\section{Automake vs Cmake}
+
+The project Ergo originally use Autotools for generating Makefiles. We generate Makefiles using both CMake and Autotools. Compilation was done with \texttt{-O3} flag and \texttt{-j4} option for make.
+
+The result for Autotools is presented below:
+
+\vskip 10 pt
+
+\begin{tabular}{|l|l|l|l|l|}
+	\hline
+	& real & user & sys & size\\
+	\hline
+	autotools + make & 6m1.541s & 6m1.541s & 0m6.501s & 3.2MB\\
+	\hline
+\end{tabular}
+
+\vskip 10 pt
+
+The main question which we wanted to answer here is what the difference between Automake and Cmake and which generator is better?
+
+
+In order to compile project with CMake, developer should learn its own non-trivial syntax, different from Autotools.
+
+Both autotools and CMake is easy to install.
+
+Autotools are done for Linux systems and work just with Makefiles. CMake provide support for many platforms, compilers and build systems.
+
+Both generators require at least two steps for compiling program. Firstly, you must run cmake/configure and after that use generated makefile.
+
+
+In addition to a build system, over the years CMake has evolved into a family of development tools: CMake, CTest, CPack, and CDash.
+
+
+In conclusion, CMake is a powerful tool. If the project is already done with autotools and all developers are familiar with this generator, there is maybe no reason to change to CMake. Instead, for any new project it is advisable to use CMake since it is very promising build system which is becaming very popular. 
+
+
+
+\section{Cmake tutorials}
+
+The dicumentation can be generated by \texttt{cmake --help-html}.
+
+There are not so many good tutorial about CMake. I am using slides of Eric NOULARD from github (\url{https://github.com/TheErk/CMake-tutorial}).
+
+Cmake wiki: \url{http://www.cmake.org/Wiki/CMake}
+
+CMake Useful Variables: \url{http://www.cmake.org/Wiki/CMake_Useful_Variables}
+
+
+
+\end{document}
+
+
+
+
+
+
+
+%cmake -DBLAS_LIBRARIES=/opt/OpenBLAS/lib/libopenblas.a -DLAPACK_LIBRARIES=/usr/lib/liblapack.so ..
+
+
