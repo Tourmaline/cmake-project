@@ -36,7 +36,11 @@ set(CTEST_CONFIGURE_COMMAND "${CTEST_CONFIGURE_COMMAND} \"${CTEST_SOURCE_DIRECTO
 
 ctest_start("Nightly")
 
-ctest_update()
+ctest_update(RETURN_VALUE res)
+if(res EQUAL -1)
+message(FATAL_ERROR "Cannot update git directory")
+endif()
+
 ctest_configure()
 ctest_build()
 ctest_test()
