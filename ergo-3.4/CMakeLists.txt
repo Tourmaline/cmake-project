@@ -224,5 +224,5 @@ include(CPack)
 
 # add subdirectory
 add_subdirectory(source)
-file(COPY test DESTINATION ${PROJECT_BINARY_DIR})
+file(COPY test_ctest DESTINATION ${PROJECT_BINARY_DIR})
 
