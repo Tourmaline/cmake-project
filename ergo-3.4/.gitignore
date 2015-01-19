@@ -64,5 +64,5 @@ source/test/xcmat_sparse_test
 source/test/xcmat_test
 documentation/html/
 *~
-build/*
+build*/*
 #*#
