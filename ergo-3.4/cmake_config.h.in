@@ -12,6 +12,7 @@
 #define ERGO_DATA_PREFIX "/usr/local/share/ergo"
 
 
+
 /* Name of package */
 #define PACKAGE @PACKAGE@
 
@@ -37,6 +38,7 @@
 #define VERSION @PACKAGE_VERSION@
 
 
+
 /* which precision should be used */
 #cmakedefine PRECISION_DOUBLE
 
@@ -46,8 +48,8 @@
 /* which precision should be used */
 #cmakedefine PRECISION_SINGLE 
 
-/* Define to 1 if you have the ANSI C header files. */
-//#cmakedefine STDC_HEADERS 
+
+
 
 /* Use BLAS for small matrices in XC integration */
 #cmakedefine USE_BLAS_IN_XC 
@@ -61,106 +63,9 @@
 /* Use C++ Linear Algebra Template Library */
 #cmakedefine USE_LINALG_TEMPLATES
 
-/* Define to 1 if `lex' declares `yytext' as a `char *' by default, not a
-char[]'. */
-#cmakedefine YYTEXT_POINTER 
-
-
-
-/* Define to 1 if you have the `sqrtl' function. */
-#cmakedefine HAVE_SQRTL
-
-/* Define to 1 if you have the <stddef.h> header file. */
-#cmakedefine HAVE_STDDEF_H
-
-
 
 /* XC functionals' precision */
 #define FUNC_PRECISION @FUNC_PRECISION@
-
-/* Define to 1 if you have the `atexit' function. */
-#cmakedefine HAVE_ATEXIT
-
-
-
-/* Define to 1 if you have the <stdint.h> header file. */
-#cmakedefine HAVE_STDINT_H
-
-/* Define to 1 if you have the <stdlib.h> header file. */
-#cmakedefine HAVE_STDLIB_H
-
-/* Define to 1 if you don't have `vprintf' but do have `_doprnt.' */
-#cmakedefine HAVE_DOPRNT
-
-/* Define to 1 if you have the `vprintf' function. */
-#cmakedefine HAVE_VPRINTF
-
-/* Define to 1 if you have the `erf' function. */
-#cmakedefine HAVE_ERF 
-
-/* Define to 1 if you have the `erfc' function. */
-#cmakedefine HAVE_ERFC 
-
-/* Define to 1 if you have the `erfcf' function. */
-#cmakedefine HAVE_ERFCF 
-
-/* Define to 1 if you have the `erfcl' function. */
-#cmakedefine HAVE_ERFCL 
-
-/* Define to 1 if you have the `erff' function. */
-#cmakedefine HAVE_ERFF 
-
-/* Define to 1 if you have the `erfl' function. */
-#cmakedefine HAVE_ERFL 
-
-/* Define to 1 if you have the `exp' function. */
-#cmakedefine HAVE_EXP 
-
-/* Define to 1 if you have the `expf' function. */
-#cmakedefine HAVE_EXPF 
-
-/* Define to 1 if you have the `erfcl' function. */
-#cmakedefine HAVE_ERFCL 
-
-/* Define to 1 if you have the `erff' function. */
-#cmakedefine HAVE_ERFF 
-
-/* Define to 1 if you have the `erfl' function. */
-#cmakedefine HAVE_ERFL 
-
-
-
-
-
-/*   FIX ME  - copy paste from config.h of automake */
-
-/* Define to rpl_malloc if the replacement function should be used. */
-/* #undef malloc */
-
-/* Define to rpl_realloc if the replacement function should be used. */
-/* #undef realloc */
-
-/* Define to the equivalent of the C99 'restrict' keyword, or to
-   nothing if this is not supported.  Do not define if restrict is
-   supported directly.  */
-#define restrict __restrict
-/* Work around a bug in Sun C++: it does not support _Restrict or
-   __restrict__, even though the corresponding Sun C compiler ends up with
-   "#define restrict _Restrict" or "#define restrict __restrict__" in the
-   previous line.  Perhaps some future version of Sun C++ will work with
-   restrict; if so, hopefully it defines __RESTRICT like Sun C does.  */
-#if defined __SUNPRO_CC && !defined __RESTRICT
-# define _Restrict
-# define __restrict__
-#endif
-
-/* Define to `unsigned int' if <sys/types.h> does not define. */
-/* #undef size_t */
-
-/* Define to empty if the keyword `volatile' does not work. Warning: valid
-   code using `volatile' can become incorrect without. Disable with care. */
-/* #undef volatile */
-
 
 
 #endif
