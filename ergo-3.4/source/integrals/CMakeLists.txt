@@ -79,15 +79,16 @@ simple_sparse_mat.h
 
 add_library(integrals STATIC ${integrals_headers} ${integrals_sources})
 
+
 # add subdirectories where to look for headers
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 include_directories(${CMAKE_SOURCE_DIR}/source)
 
 set(library_subdirs
-matrix
-basisset
 utilities
 utilities_basic
+basisset
+matrix
 )
  
 foreach(dir ${library_subdirs})
@@ -96,14 +97,6 @@ endforeach()
 
 include_directories(${INTERNAL_BLAS_INCLUDE_DIRS})
 include_directories(${INTERNAL_LAPACK_INCLUDE_DIRS})
-
-
-install(TARGETS integrals
-RUNTIME DESTINATION bin
-LIBRARY DESTINATION lib
-ARCHIVE DESTINATION lib/static )
-install( FILES ${integrals_headers} DESTINATION include )
-
 
 
 install(TARGETS integrals

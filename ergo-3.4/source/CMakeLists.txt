@@ -1,17 +1,17 @@
 # add all subdirectories
 set(subdirs
-matrix
-integrals
 basisset
 electron_dynamics
 utilities
 utilities_basic
+matrix
+integrals
 ci
 scf
 dft
 densfromf
 tddft
-#test
+test
 )
 
 foreach(dir ${subdirs})
