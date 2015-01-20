@@ -4,11 +4,12 @@
 \usepackage{hyperref}
 \usepackage{listings}
 \usepackage{graphicx}
+\usepackage{paralist}
 
 \lstset{language=C}
 
 
-\title{cmake - Cross-Platform Makefile Generator}
+\title{CMake - Cross-Platform Makefile Generator}
 \author{Anastasia Kruchinina}
 
 \begin{document}
@@ -73,7 +74,7 @@ Then zip and tgz archive files will be generated in the current build directory.
 
 
 CMake allow to write \textbf{configuration files}. The function \texttt{configure\_file} reads input file and produce new configure file where all variable definitions from input file replaced by their values specified in CMakeList.txt. If the input file is modified the build system will re-run CMake to re-configure the file and generate the build system again. In our case the input file is cmake\_config.h.in.
-If the variable in cmake\_config.h.in. is specified using \texttt{cmakedefine}, then ake will change \texttt{cmakedefine} on \texttt{define} or \texttt{undef} depending on whether the variable defined or not. Another option is to use variables written as \texttt{@var@}. Then CMake will change \texttt{@var@} to the value defined in CMakeFiles.txt.
+If the variable in cmake\_config.h.in. is specified using \texttt{cmakedefine}, then CMake will change \texttt{cmakedefine} on \texttt{define} or \texttt{undef} depending on whether the variable defined or not. Another option is to use variables written as \texttt{@var@}. Then CMake will change \texttt{@var@} to the value of \texttt{var} defined in CMakeFiles.txt.
 
 
 
@@ -81,8 +82,6 @@ If the variable in cmake\_config.h.in. is specified using \texttt{cmakedefine}, 
 \section{CTest and CDash}
 
 \subsection{Testing using CTest}
-
-Useful link: \url{http://www.vtk.org/Wiki/CMake/Testing_With_CTest}
 
 The command in the CMakeFiles.txt \texttt{enable\_testing()} adds another build target, which allows to run tests for Makefile generators, or RUN\_TESTS for integrated development environments (like Visual Studio).
 
@@ -108,7 +107,7 @@ In order to submit to some other server, put the CTestConfig.cmake in the top le
 There are three types of dashboard submissions:
 \begin{description}
  \item[Experimental] means the current state of the project. An experimental submission can be performed at any time, usually interactively from the current working copy of a developer.
-  \item[Nightly] is similar to experimental, except that the source tree will be set to the state it was in at a specific nightly time. This ensures that all "nightly" submissions correspond to the state of the project at the same point in time. "Nightly" builds are usually done automatically at a preset time of day.
+  \item[Nightly] is similar to experimental, except that the source tree will be set to the state it was in at a specific nightly time. This ensures that all "nightly" submissions correspond to the state of the project at the same point in time. "Nightly" builds are usually done automatically at a present time of day.
  \item[Continuous] means that the source tree is updated to the latest revision, and a build / test cycle is performed only if any files were actually updated. Like "Nightly" builds, "Continuous" ones are usually done automatically and repeatedly in intervals.
 \end{description}
 
@@ -130,32 +129,24 @@ Code coverage (\url{http://en.wikipedia.org/wiki/Code_coverage}) it is a measure
 
 The CTest allow writing scripts which automate testing and submitting dashboards. Cron can run jobs which are running such scripts regularly.
 
-CMake Scripting Of CTest + Cron:
-\begin{itemize}
- \item \url{http://www.cmake.org/Wiki/CMake_Scripting_Of_CTest}
-\item\url{http://www.gofigure2.org/index.php/developers/2-uncategorised/30-setup-ctest-server.html}
-\item\url{https://techbase.kde.org/Development/CMake/DashboardBuilds#How_to_set_up_a_Nightly_build}
-\item\url{http://insightsoftwareconsortium.github.io/ITKBarCamp-doc/SoftwareQuality/DashboardSubmission/index.html}
-\end{itemize}
-
 Currently coverage is only supported on gcc compiler \texttt{cgov}[\url{http://en.wikipedia.org/wiki/Gcov}]. To perform coverage test, make sure that your code is built with debug symbols, without optimization, and with special flags. These flags are:
 \texttt{-fprofile-arcs -ftest-coverage}
 
 CTest maintains the following four metrics:
-\begin{itemize}
+\begin{compactitem}
 \item Number of lines covered
 \item Number of lines not covered
 \item Total number of lines in code
 \item Percentage of coverage (number of covered lines/total lines)
-\end{itemize}
+\end{compactitem}
 
 
-On the webpage of the project on www.cdash.org one can find all the information about code coverage.
+On the CDash webpage of the project one can find all the information about code coverage.
 
 
 \subsection{Dynamic Analysis}
 
-Dynamic Analysis can be performed using Valgring Memcheck during running tests. Results about memory leaks, uninitialized memory reads, freeing invalid memory, invalid pointer reads and so on can be found on the project dashboard.
+Dynamic Analysis can be performed using Valgrind Memcheck during running tests. Results about memory leaks, uninitialized memory reads, freeing invalid memory, invalid pointer reads and so on can be found on the project dashboard.
 
 \section{CMake for Ergo code}
 
@@ -165,13 +156,17 @@ cmake /path/to/source
 \end{verbatim}
 
 
-We have bash scripts for testing. Every time CMake copy test directory to the build directory. The reason for that is that test files must know the location of the executable.
+In the Ergo code bash scripts are used for testing. Every time during the configuration CMake copy \texttt{cmake\_test} directory to the build directory. The reason for that is that test files must know the location of the executable.
 %I copy the whole directory (notice that I changed paths in \texttt{test\_hf.sh}) into build. 
 After running CMake and compilation, the CTest run tests from the build directory.
+
+\vskip 10 pt
 
 CDash for the Ergo code: 
 
 \url{http://my.cdash.org/index.php?project=ergo_cmake}.
+
+\vskip 10 pt
 
 The build errors, coverage and dynamic analysis are presented there.  
 
@@ -195,9 +190,9 @@ Nigthly tests can be run using cron environment. In order to set up the cron to 
     /path/to/DashScript.cmake > /path/to/logs/cdash_nightly.log 2>&1
 \end{verbatim}
 
-The DashScript contains commands for CTest to run clone git (or other system) directory, to fetch changes, configure and compile the code, run tests and submit the results to the dashboard.
+The DashScript contains commands for CTest to run clone git repository, to fetch changes, configure and compile the code, run tests and submit the results to the dashboard.
 
-On order to be able to run such command, it is needed add ssh key to the git account to allow fetching new versions without password check and install \texttt{keychain} to make cron install needed ssh environment variables before running script.
+On order to be able to run such command, it is needed to add ssh key to the git account to allow fetching new versions without password check and install \texttt{keychain} to make cron install needed ssh environment variables before running script.
 
 Then after the submission of the job, one can see on dashboard which files were updated.
 
@@ -210,7 +205,7 @@ cmake -G Ninja -DCMAKE_MAKE_PROGRAM=/path/to/ninja ..
 \end{verbatim}
 
 For compilation of the program just run \texttt{ninja}.
-Let us compare results of compilation with make and with ninja with option \texttt{-j4}:
+Let us compare results of compilation with make and with ninja using option \texttt{-j4}:
 
 \vskip 10 pt
 
@@ -218,14 +213,16 @@ Let us compare results of compilation with make and with ninja with option \text
 	\hline
 	& real & user & sys & size\\
 	\hline
-	cmake + ninja & 5m32.708s & 8m57.294s & 0m7.644s & 3.4MB\\
-	cmake + make  & 5m36.039s & 8m48.801s & 0m6.743s & 3.4MB\\
-	\hline
+	cmake + ninja & 6m19.640s & 10m16.851s & 0m9.065s & 3.4MB\\
+	cmake + make  & 5m45.345s & 9m43.693s & 0m10.315s & 3.4MB\\
+	\hline	
 \end{tabular}
+
+
 
 \vskip 10 pt
 
-Therefore, we did not notice difference in time and size of the executables between ninja and make systems.
+In our case the program compiles a bit slower using ninja build file then using Makefiles. However, many developers report the opposite.  
 
 
 
@@ -241,9 +238,13 @@ The result for Autotools is presented below:
 	\hline
 	& real & user & sys & size\\
 	\hline
-	autotools + make & 6m1.541s & 6m1.541s & 0m6.501s & 3.2MB\\
+	autotools + make & 6m30.709s & 9m24.159s & 0m8.878s & 3.2MB\\
 	\hline
 \end{tabular}
+
+\vskip 10 pt
+
+Compare this results with the previous table (cmake + make). Using cmake we gain 10\% speed up of the compilation.
 
 \newpage
 
@@ -251,14 +252,17 @@ The result for Autotools is presented below:
 Automake vs CMake:
 
 \begin{itemize}
- \item Automake/autoconf are replaced by cmake. Any change in the input config.h.in file or CMakeFiles.txt will result in reconfiguration. Instead if one use autotools, user must call automake or autoconf manually.
- \item CMake provide cache (CMakeCache.txt), where it save all system and user variables. During next configuration, cmake looks at the cache file and add just new variables.  If user modified variables in CMakeFiles.txt, it is needed tp update the cache. It can be done using a CMake GUI (CMakeSetup on Windows or ccmake on UNIX), by wizard mode (cmake -i) or by deleting CMakeCache.txt from the build directory.
-  \item  Both generators allow to check existence of functions/include files. CMake allow to specify which information will be written on the configuration file. In contrast, autoconf is adding too much information, which is actually never used in the code.
+ \item  Automake/autoconf are replaced by cmake. Any change in the input config.h.in file or CMakeFiles.txt will result in the reconfiguration. Instead if one use autotools, user must call automake or autoconf manually.
+ \item  CMake provide cache (CMakeCache.txt), where it save system and user variables. During next configuration, cmake looks at the cache file and add just new variables from CMakeLists.txt or redefine the variables specified in the command line.  If user modified variables in CMakeFiles.txt, it is needed to update the cache. It can be done using a CMake GUI (CMakeSetup on Windows or ccmake on UNIX), by wizard mode (cmake -i). One can use also directly delete CMakeCache.txt from the build directory and reconfigure. It make sense since usually user do not modify variables in the CMakeFile.txt, but specify them in the command line.
+ \item  Both generators allow to check existence of functions/include files. CMake allow to specify which information will be written on the configuration file. In contrast, autoconf is adding too much information, which is actually never used in the code.
  \item  In order to compile project with CMake, developer should learn its own non-trivial syntax, different from Autotools.
- \item  Both autotools and CMake is easy to install.
+ \item  Both autotools and CMake is easy to install. 
+ \item  Automake and CMake can exist together in one project, their files do not overlap.
  \item  Autotools are done for Linux systems and work just with Makefiles. CMake provide support for many platforms, compilers and build systems. CMake is perfect for creating portable c++ software.
  \item  Both generators require at least two steps for compiling program. Firstly, you must run cmake/configure and after that use generated makefiles. 
  \item  In addition to a build system, over the years CMake has evolved into a family of development tools: CMake, CTest, CPack, and CDash. Using CTest and CDash it is easy to monitor the status of the development.
+ \item CMake gives nice colorful output and undestandable description of errors.
+ \item Makefiles generated by CMake are twice shorter then Makefiles from Automake.
 \end{itemize}
 
 In conclusion, for any new project it is advisable to use CMake since it is very promising build system which is becoming very popular. In my opinion, CMake allow more control on how to configure/compile the project. 
@@ -274,13 +278,31 @@ CTest and CDash tools can be used with different generators of the build system,
 
 \section{Cmake tutorials}
 
-The documentation can be generated by \texttt{cmake --help-html}.
+There are not so many good tutorials about CMake. In this section I am mentioning some if them.
 
-There are not so many good tutorial about CMake. I am using slides of Eric NOULARD from github (\url{https://github.com/TheErk/CMake-tutorial}) and  slides from the course \url{http://bast.fr/talks/cmake/kung-fu}.
+\vskip 10 pt
 
-Cmake wiki: \url{http://www.cmake.org/Wiki/CMake}
+\noindent The documentation can be generated by \texttt{cmake --help-html}.
 
-CMake Useful Variables: \url{http://www.cmake.org/Wiki/CMake_Useful_Variables}
+\noindent  Slides of Eric Noulard from github
+
+\url{https://github.com/TheErk/CMake-tutorial}
+
+\noindent Slides from the course 
+
+\url{http://bast.fr/talks/cmake/kung-fu}
+
+\noindent Cmake wiki: 
+
+\url{http://www.cmake.org/Wiki/CMake}
+
+\noindent CMake Useful Variables: 
+
+\url{http://www.cmake.org/Wiki/CMake_Useful_Variables}
+
+\noindent CTest: 
+
+\url{http://www.vtk.org/Wiki/CMake/Testing_With_CTest}
 
 
 
