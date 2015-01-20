@@ -3,6 +3,8 @@
 /* The location of installed ergo data files */
 #undef ERGO_DATA_PREFIX
 
+
+
 /* The location of the sources */
 #undef ERGO_SPREFIX
 
